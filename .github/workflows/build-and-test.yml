@@ -1,6 +1,8 @@
-name: Node.js Build & Test on PR
+name: Node.js Build & Test
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 

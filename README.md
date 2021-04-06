@@ -1,6 +1,6 @@
 azure-function-multipart
 ===========
-![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test-main.yml/badge.svg)
+![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test.yml/badge.svg)
 [![codecov](https://codecov.io/gh/anzharip/azure-function-multipart/branch/main/graph/badge.svg?token=LWQJDZNQV7)](https://codecov.io/gh/anzharip/azure-function-multipart)
 
 Module to parse multipart/form-data on Azure Functions. 
