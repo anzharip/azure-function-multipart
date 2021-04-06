@@ -17,8 +17,7 @@
   },
   "keywords": [
     "azure",
-    "azure",
-    "functions",
+    "azure-functions",
     "multipart",
     "multipart/form-data",
     "http",
