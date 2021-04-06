@@ -1,5 +1,6 @@
 azure-function-multipart
 ===========
+![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test.yml/badge.svg)
 
 Module to parse multipart/form-data on Azure Functions. 
 
