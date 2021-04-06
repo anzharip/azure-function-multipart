@@ -20,3 +20,5 @@ Dockerfile
 .eslintrc.json
 .yarnrc
 tmp
+tsconfig.json
+jest.config.js
