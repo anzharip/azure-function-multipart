@@ -1,37 +1,85 @@
-## Welcome to GitHub Pages
+# azure-function-multipart
 
-You can use the [editor on GitHub](https://github.com/anzharip/azure-function-multipart/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test.yml/badge.svg)
+[![codecov](https://codecov.io/gh/anzharip/azure-function-multipart/branch/main/graph/badge.svg?token=LWQJDZNQV7)](https://codecov.io/gh/anzharip/azure-function-multipart)
+![dependencies](https://img.shields.io/david/anzharip/azure-function-multipart)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/96165dceeefa4968b4822ab97d846faa)](https://www.codacy.com/gh/anzharip/azure-function-multipart/dashboard?utm_source=github.com&utm_medium=referral&utm_content=anzharip/azure-function-multipart&utm_campaign=Badge_Grade)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Module to parse multipart/form-data on Azure Functions.
 
-### Markdown
+Note:
+Will also works on any Node's HTTP request object, asides of Azure Functions' HttpRequest object, as this package is based on busboy.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Install
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```bash
+npm i @anzp/azure-function-multipart
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+## Examples
 
-### Jekyll Themes
+Parsing multipart/form-data on Azure Function. This will return the parsed fields and files back as the response:
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/anzharip/azure-function-multipart/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+```typescript
+import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import parseMultipartFormData from "@anzp/azure-function-multipart";
 
-### Support or Contact
+const httpTrigger: AzureFunction = async function (
+  context: Context,
+  req: HttpRequest
+): Promise<void> {
+  const { fields, files } = await parseMultipartFormData(req);
+  context.log("HTTP trigger function processed a request.");
+  const name = req.query.name || (req.body && req.body.name);
+  const responseMessage = {
+    fields,
+    files,
+  };
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+  context.res = {
+    // status: 200, /* Defaults to 200 */
+    body: responseMessage,
+  };
+};
+
+export default httpTrigger;
+```
+
+Example client request using CURL:
+
+```bash
+curl --request POST \
+  --url http://localhost:7071/api/HttpTrigger1 \
+  --header 'Content-Type: multipart/form-data; boundary=---011000010111000001101001' \
+  --form update=false \
+  --form collection=@/Users/anzhari/masterdata/managements.json
+```
+
+This is the example reponse received on the client:
+
+```json
+{
+  "fields": [
+    {
+      "fieldname": "update",
+      "value": "false",
+      "fieldnameTruncated": false,
+      "valueTruncated": false,
+      "encoding": "7bit",
+      "mimetype": "text/plain"
+    }
+  ],
+  "files": [
+    {
+      "fieldname": "file",
+      "bufferFile": {
+        "type": "Buffer",
+        "data": [91, 10, ...10, 93]
+      },
+      "filename": "managements.json",
+      "encoding": "7bit",
+      "mimetype": "application/json"
+    }
+  ]
+}
+```
