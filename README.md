@@ -1,25 +1,24 @@
-azure-function-multipart
-===========
+# azure-function-multipart
+
 ![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test.yml/badge.svg)
 [![codecov](https://codecov.io/gh/anzharip/azure-function-multipart/branch/main/graph/badge.svg?token=LWQJDZNQV7)](https://codecov.io/gh/anzharip/azure-function-multipart)
+![dependencies](https://img.shields.io/david/anzharip/azure-function-multipart)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/96165dceeefa4968b4822ab97d846faa)](https://www.codacy.com/gh/anzharip/azure-function-multipart/dashboard?utm_source=github.com&utm_medium=referral&utm_content=anzharip/azure-function-multipart&utm_campaign=Badge_Grade)
 
-Module to parse multipart/form-data on Azure Functions. 
+Module to parse multipart/form-data on Azure Functions.
 
-Note: 
-Will also works on any Node's HTTP request object, asides of Azure Functions' HttpRequest object, as this package is based on busboy. 
+Note:
+Will also works on any Node's HTTP request object, asides of Azure Functions' HttpRequest object, as this package is based on busboy.
 
-Install
-=======
+## Install
 
-```
+```bash
 npm i @anzp/azure-function-multipart
 ```
 
+## Examples
 
-Examples
-========
-
-Parsing multipart/form-data on Azure Function. This will return the parsed fields and files back as the response: 
+Parsing multipart/form-data on Azure Function. This will return the parsed fields and files back as the response:
 
 ```typescript
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
@@ -44,11 +43,11 @@ const httpTrigger: AzureFunction = async function (
 };
 
 export default httpTrigger;
-
 ```
 
-Example client request using CURL: 
-```
+Example client request using CURL:
+
+```bash
 curl --request POST \
   --url http://localhost:7071/api/HttpTrigger1 \
   --header 'Content-Type: multipart/form-data; boundary=---011000010111000001101001' \
@@ -56,7 +55,8 @@ curl --request POST \
   --form collection=@/Users/anzhari/masterdata/managements.json
 ```
 
-This is the example reponse received on the client: 
+This is the example reponse received on the client:
+
 ```json
 {
   "fields": [
@@ -74,13 +74,7 @@ This is the example reponse received on the client:
       "fieldname": "file",
       "bufferFile": {
         "type": "Buffer",
-        "data": [
-          91,
-          10,
-          ...
-          10,
-          93
-        ]
+        "data": [91, 10, ...10, 93]
       },
       "filename": "managements.json",
       "encoding": "7bit",
@@ -88,5 +82,4 @@ This is the example reponse received on the client:
     }
   ]
 }
-
 ```
