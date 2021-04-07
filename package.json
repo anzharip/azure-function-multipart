@@ -1,7 +1,7 @@
 {
   "name": "@anzp/azure-function-multipart",
   "version": "1.0.1",
-  "description": "",
+  "description": "Module to parse multipart/form-data on Azure Functions.",
   "publishConfig": {
     "access": "public"
   },
