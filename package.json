@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/anzharip/azure-function-multipart/issues"
   },
-  "homepage": "https://github.com/anzharip/azure-function-multipart#readme",
+  "homepage": "https://azure-function-multipart.stor.my.id/",
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
