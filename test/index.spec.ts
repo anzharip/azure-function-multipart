@@ -25,19 +25,19 @@ describe("index.js", () => {
   });
 
   it("should populate fields property", async () => {
-    const { fields, files } = await parseMultipartFormData(request);
+    const { fields } = await parseMultipartFormData(request);
     expect(fields.length).toBe(1);
   });
 
   it("should populate files property", async () => {
-    const { fields, files } = await parseMultipartFormData(request);
+    const { files } = await parseMultipartFormData(request);
     expect(files.length).toBe(1);
   });
 
   it("should parse the buffer file correctly", async () => {
-    const { fields, files } = await parseMultipartFormData(request);
+    const { files } = await parseMultipartFormData(request);
     const json = JSON.parse(files[0].bufferFile.toString());
-    expect(json["you"]).toBe("know the rules");
-    expect(json["and"]).toBe("so do I");
+    expect(json.you).toBe("know the rules");
+    expect(json.and).toBe("so do I");
   });
 });
