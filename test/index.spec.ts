@@ -6,7 +6,7 @@ import parseMultipartFormData from "../src/index";
 describe("index.js", () => {
   let request: HttpRequest;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const file1 = fs.readFileSync("test/fixture/dummy-data.json");
     const body = new FormData();
     body.append("field1", "value1");
@@ -39,5 +39,12 @@ describe("index.js", () => {
     const json = JSON.parse(files[0].bufferFile.toString());
     expect(json.you).toBe("know the rules");
     expect(json.and).toBe("so do I");
+  });
+
+  it("should reject the promise due to missing headers", async () => {
+    request.headers = {};
+    expect(async () => {
+      await parseMultipartFormData(request);
+    }).rejects.toThrow();
   });
 });
