@@ -4,6 +4,7 @@
 [![codecov](https://codecov.io/gh/anzharip/azure-function-multipart/branch/main/graph/badge.svg?token=LWQJDZNQV7)](https://codecov.io/gh/anzharip/azure-function-multipart)
 ![dependencies](https://img.shields.io/david/anzharip/azure-function-multipart)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/96165dceeefa4968b4822ab97d846faa)](https://www.codacy.com/gh/anzharip/azure-function-multipart/dashboard?utm_source=github.com&utm_medium=referral&utm_content=anzharip/azure-function-multipart&utm_campaign=Badge_Grade)
+![npm downloads](https://img.shields.io/npm/dm/@anzp/azure-function-multipart)
 
 Module to parse multipart/form-data on Azure Functions.
 
