@@ -3,15 +3,23 @@ import { HttpRequest } from "@azure/functions";
 import { ParsedField } from "./types/parsed-field.type";
 import { ParsedFile } from "./types/parsed-file.type";
 import { ParsedMultipartFormData } from "./types/parsed-multipart-form-data.type";
+import { Config } from "./types/config.type";
 
 export default async function parseMultipartFormData(
-  request: HttpRequest
+  request: HttpRequest,
+  options?: Config
 ): Promise<ParsedMultipartFormData> {
   return new Promise((resolve, reject) => {
     try {
       const fields: Promise<ParsedField>[] = [];
       const files: Promise<ParsedFile>[] = [];
-      const busboy = new Busboy({ headers: request.headers });
+
+      let busboy;
+      if (options) {
+        busboy = new Busboy({ headers: request.headers, ...options });
+      } else {
+        busboy = new Busboy({ headers: request.headers });
+      }
 
       busboy.on(
         "file",

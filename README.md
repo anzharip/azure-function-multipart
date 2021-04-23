@@ -84,3 +84,34 @@ This is the example reponse received on the client:
   ]
 }
 ```
+
+You can also pass [busboy constructor config](https://github.com/mscdex/busboy#busboy-methods) as an optional parameter:
+
+```typescript
+import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import parseMultipartFormData from "@anzp/azure-function-multipart";
+
+const httpTrigger: AzureFunction = async function (
+  context: Context,
+  req: HttpRequest
+): Promise<void> {
+  // Set the max number of non-file fields to 1 (Default: Infinity).
+  const config = {
+    limits: { fields: 1 },
+  };
+  const { fields, files } = await parseMultipartFormData(req, config);
+  context.log("HTTP trigger function processed a request.");
+  const name = req.query.name || (req.body && req.body.name);
+  const responseMessage = {
+    fields,
+    files,
+  };
+
+  context.res = {
+    // status: 200, /* Defaults to 200 */
+    body: responseMessage,
+  };
+};
+
+export default httpTrigger;
+```

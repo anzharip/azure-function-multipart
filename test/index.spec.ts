@@ -10,6 +10,8 @@ describe("index.js", () => {
     const file1 = fs.readFileSync("test/fixture/dummy-data.json");
     const body = new FormData();
     body.append("field1", "value1");
+    body.append("field2", "value2");
+    body.append("field3", "value3");
     body.append("file1", file1);
 
     request = {
@@ -26,7 +28,7 @@ describe("index.js", () => {
 
   it("should populate fields property", async () => {
     const { fields } = await parseMultipartFormData(request);
-    expect(fields.length).toBe(1);
+    expect(fields.length).toBe(3);
   });
 
   it("should populate files property", async () => {
@@ -46,5 +48,12 @@ describe("index.js", () => {
     expect(async () => {
       await parseMultipartFormData(request);
     }).rejects.toThrow();
+  });
+
+  it("should accept options parameter, parse only one field", async () => {
+    const { fields } = await parseMultipartFormData(request, {
+      limits: { fields: 1 },
+    });
+    expect(fields.length).toBe(1);
   });
 });
