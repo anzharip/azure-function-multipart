@@ -1,10 +1,10 @@
 # azure-function-multipart
 
-![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test.yml/badge.svg)
+[![Build and Test](https://github.com/anzharip/azure-function-multipart/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/anzharip/azure-function-multipart/actions)
 [![codecov](https://codecov.io/gh/anzharip/azure-function-multipart/branch/main/graph/badge.svg?token=LWQJDZNQV7)](https://codecov.io/gh/anzharip/azure-function-multipart)
-![dependencies](https://img.shields.io/david/anzharip/azure-function-multipart)
+[![dependencies](https://img.shields.io/david/anzharip/azure-function-multipart)](https://www.npmjs.com/package/@anzp/azure-function-multipart)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/96165dceeefa4968b4822ab97d846faa)](https://www.codacy.com/gh/anzharip/azure-function-multipart/dashboard?utm_source=github.com&utm_medium=referral&utm_content=anzharip/azure-function-multipart&utm_campaign=Badge_Grade)
-![npm downloads](https://img.shields.io/npm/dm/@anzp/azure-function-multipart)
+[![npm downloads](https://img.shields.io/npm/dm/@anzp/azure-function-multipart)](https://www.npmjs.com/package/@anzp/azure-function-multipart)
 
 Module to parse multipart/form-data on Azure Functions.
 
@@ -83,4 +83,35 @@ This is the example reponse received on the client:
     }
   ]
 }
+```
+
+You can also pass [busboy constructor config](https://github.com/mscdex/busboy#busboy-methods) as an optional parameter:
+
+```typescript
+import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import parseMultipartFormData from "@anzp/azure-function-multipart";
+
+const httpTrigger: AzureFunction = async function (
+  context: Context,
+  req: HttpRequest
+): Promise<void> {
+  // Set the max number of non-file fields to 1 (Default: Infinity).
+  const config = {
+    limits: { fields: 1 },
+  };
+  const { fields, files } = await parseMultipartFormData(req, config);
+  context.log("HTTP trigger function processed a request.");
+  const name = req.query.name || (req.body && req.body.name);
+  const responseMessage = {
+    fields,
+    files,
+  };
+
+  context.res = {
+    // status: 200, /* Defaults to 200 */
+    body: responseMessage,
+  };
+};
+
+export default httpTrigger;
 ```
