@@ -54,7 +54,7 @@
   "dependencies": {
     "@azure/functions": "^1.2.3",
     "@types/busboy": "^0.2.3",
-    "@types/node": "^14.14.37",
+    "@types/node": "^15.0.0",
     "busboy": "^0.3.1"
   }
 }
