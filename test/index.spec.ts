@@ -4,7 +4,7 @@ import fs from "fs";
 import parseMultipartFormData from "../src/index";
 
 describe("index.js", () => {
-  let request: HttpRequest & { headers: { "content-type": string } };
+  let request: HttpRequest;
 
   beforeEach(async () => {
     const file1 = fs.readFileSync("test/fixture/dummy-data.json");
@@ -45,6 +45,13 @@ describe("index.js", () => {
 
   it("should reject the promise due to missing headers", async () => {
     request.headers = {} as FormData.Headers & { "content-type": string };
+    expect(async () => {
+      await parseMultipartFormData(request);
+    }).rejects.toThrow();
+  });
+
+  it("should reject the promise due to missing content-type", async () => {
+    delete request.headers["content-type"];
     expect(async () => {
       await parseMultipartFormData(request);
     }).rejects.toThrow();
