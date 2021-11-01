@@ -6,7 +6,7 @@ import { ParsedMultipartFormData } from "./types/parsed-multipart-form-data.type
 import { Config } from "./types/config.type";
 
 export default async function parseMultipartFormData(
-  request: HttpRequest & { headers: { "content-type": string } },
+  request: HttpRequest,
   options?: Config
 ): Promise<ParsedMultipartFormData> {
   return new Promise((resolve, reject) => {
@@ -16,9 +16,14 @@ export default async function parseMultipartFormData(
 
       let busboy;
       if (options) {
-        busboy = new Busboy({ headers: request.headers, ...options });
+        busboy = new Busboy({
+          headers: (request.headers as unknown) as Busboy.BusboyHeaders,
+          ...options,
+        });
       } else {
-        busboy = new Busboy({ headers: request.headers });
+        busboy = new Busboy({
+          headers: (request.headers as unknown) as Busboy.BusboyHeaders,
+        });
       }
 
       busboy.on(
