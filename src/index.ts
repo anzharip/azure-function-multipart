@@ -6,7 +6,7 @@ import { ParsedMultipartFormData } from "./types/parsed-multipart-form-data.type
 import { Config } from "./types/config.type";
 
 export default async function parseMultipartFormData(
-  request: HttpRequest,
+  request: HttpRequest & { headers: { "content-type": string } },
   options?: Config
 ): Promise<ParsedMultipartFormData> {
   return new Promise((resolve, reject) => {
