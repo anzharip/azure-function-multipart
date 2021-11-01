@@ -4,7 +4,7 @@ import fs from "fs";
 import parseMultipartFormData from "../src/index";
 
 describe("index.js", () => {
-  let request: HttpRequest;
+  let request: HttpRequest & { headers: { "content-type": string } };
 
   beforeEach(async () => {
     const file1 = fs.readFileSync("test/fixture/dummy-data.json");
@@ -18,7 +18,7 @@ describe("index.js", () => {
       method: "POST",
       url: "http://localhost:7071/api/script/mongo-replace-collection",
       headers: {
-        ...body.getHeaders(),
+        ...(body.getHeaders() as FormData.Headers & { "content-type": string }),
       },
       body: body.getBuffer(),
       query: {},
@@ -44,7 +44,7 @@ describe("index.js", () => {
   });
 
   it("should reject the promise due to missing headers", async () => {
-    request.headers = {};
+    request.headers = {} as FormData.Headers & { "content-type": string };
     expect(async () => {
       await parseMultipartFormData(request);
     }).rejects.toThrow();
