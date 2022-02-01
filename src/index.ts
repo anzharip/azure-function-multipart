@@ -4,6 +4,7 @@ import { ParsedField } from "./types/parsed-field.type";
 import { ParsedFile } from "./types/parsed-file.type";
 import { ParsedMultipartFormData } from "./types/parsed-multipart-form-data.type";
 import { Config } from "./types/config.type";
+import { IncomingHttpHeaders } from "http";
 
 export default async function parseMultipartFormData(
   request: HttpRequest,
@@ -16,34 +17,34 @@ export default async function parseMultipartFormData(
 
       let busboy;
       if (options) {
-        busboy = new Busboy({
-          headers: (request.headers as unknown) as Busboy.BusboyHeaders,
+        busboy = Busboy({
+          headers: (request.headers as unknown) as IncomingHttpHeaders,
           ...options,
         });
       } else {
-        busboy = new Busboy({
-          headers: (request.headers as unknown) as Busboy.BusboyHeaders,
+        busboy = Busboy({
+          headers: (request.headers as unknown) as IncomingHttpHeaders,
         });
       }
 
       busboy.on(
         "file",
-        function (fieldname, file, filename, encoding, mimetype) {
+        function (name, stream, { filename, encoding, mimeType }) {
           const arrayBuffer: Buffer[] = [];
-          file.on("data", function (data) {
+          stream.on("data", function (data) {
             arrayBuffer.push(data);
           });
 
-          file.on("end", function () {
+          stream.on("end", function () {
             const bufferFile = Buffer.concat(arrayBuffer);
             files.push(
               new Promise((resolve) => {
                 resolve({
-                  fieldname,
+                  name,
                   bufferFile,
                   filename,
                   encoding,
-                  mimetype,
+                  mimeType,
                 });
               })
             );
@@ -54,22 +55,19 @@ export default async function parseMultipartFormData(
       busboy.on(
         "field",
         function (
-          fieldname,
+          name,
           value,
-          fieldnameTruncated,
-          valueTruncated,
-          encoding,
-          mimetype
+          { nameTruncated, valueTruncated, encoding, mimeType }
         ) {
           fields.push(
             new Promise((resolve) => {
               resolve({
-                fieldname,
+                name,
                 value,
-                fieldnameTruncated,
+                nameTruncated,
                 valueTruncated,
                 encoding,
-                mimetype,
+                mimeType,
               });
             })
           );

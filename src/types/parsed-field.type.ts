@@ -1,8 +1,8 @@
 export type ParsedField = {
-  fieldname: string;
+  name: string;
   value: any;
-  fieldnameTruncated: boolean;
+  nameTruncated: boolean;
   valueTruncated: boolean;
   encoding: string;
-  mimetype: string;
+  mimeType: string;
 };

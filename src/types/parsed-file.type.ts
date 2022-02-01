@@ -1,7 +1,7 @@
 export type ParsedFile = {
-  fieldname: string;
+  name: string;
   bufferFile: Buffer;
   filename: string;
   encoding: string;
-  mimetype: string;
+  mimeType: string;
 };
