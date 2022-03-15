@@ -19,7 +19,9 @@ npm i @anzp/azure-function-multipart
 
 ## Examples
 
-Parsing multipart/form-data on Azure Function. This will return the parsed fields and files back as the response:
+Parsing multipart/form-data on Azure Function. This will return the parsed fields and files back as the response.
+
+For TypeScript:
 
 ```typescript
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
@@ -44,6 +46,28 @@ const httpTrigger: AzureFunction = async function (
 };
 
 export default httpTrigger;
+```
+
+For JavaScript:
+
+```javascript
+const parseMultipartFormData = require("@anzp/azure-function-multipart")
+  .default;
+
+module.exports = async function (context, req) {
+  const { fields, files } = await parseMultipartFormData(req);
+  context.log("HTTP trigger function processed a request.");
+  const name = req.query.name || (req.body && req.body.name);
+  const responseMessage = {
+    fields,
+    files,
+  };
+
+  context.res = {
+    // status: 200, /* Defaults to 200 */
+    body: responseMessage,
+  };
+};
 ```
 
 Example client request using CURL:
