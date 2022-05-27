@@ -81,7 +81,7 @@ export default async function parseMultipartFormData(
         });
       });
 
-      busboy.write(request.body);
+      busboy.end(request.body);
     } catch (error) {
       reject(error);
     }
