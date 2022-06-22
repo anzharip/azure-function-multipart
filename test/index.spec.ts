@@ -1,4 +1,4 @@
-import { HttpRequest } from "@azure/functions";
+import { HttpRequest, Form } from "@azure/functions";
 import FormData from "form-data";
 import fs from "fs";
 import parseMultipartFormData from "../src/index";
@@ -23,6 +23,10 @@ describe("index.js", () => {
       body: body.getBuffer(),
       query: {},
       params: {},
+      parseFormBody() {
+        return {} as Form;
+      },
+      user: null,
     };
   });
 
